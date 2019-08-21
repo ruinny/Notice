@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- PAGE settings -->
+  <link rel="icon" type="image/ico" href="https://t.anyni.com/icons8-new-message-160.png">
+  <title>Notice Me - 通知提醒小工具</title>
+  <meta name="description" content="NoticeMee">
+  <meta name="keywords" content="notice">
+  <meta name="author" content="Rui">
+  <!-- CSS dependencies -->
+<link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.css" rel="stylesheet">
+<link href="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.css" rel="stylesheet">
+<!-- Include the FontAwesome CSS if you want to use feedback icons provided by FontAwesome -->
+<!--<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />-->
+<!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css"> -->
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.js"></script>
+  <!-- <link rel="stylesheet" href="static\css\wireframe.css"> -->
+<script  type="text/javascript">
+
+$(function () {
+        $('form').bootstrapValidator({
+
+　　　　　　　　message: 'This value is not valid',
+            　feedbackIcons: {
+                　　　　　　　　valid: 'glyphicon glyphicon-ok',
+                　　　　　　　　invalid: 'glyphicon glyphicon-remove',
+                　　　　　　　　validating: 'glyphicon glyphicon-refresh'
+            　　　　　　　　   },
+            fields: {
+                context: {
+                    message: '内容验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '内容不能为空'
+                        }
+                    }
+                },
+                notice_date: {
+                    message: '内容验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '提醒日期不能为空'
+                        }
+                    }
+                },
+                name: {
+                    message: '内容验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '通知人不能为空'
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+</head>
+
+<body class="bg-light">
+  <div class="py-3">
+    <div class="container">
+      <div class="row">
+        <div class="text-center col-md-7 mx-auto">
+          <h2><b><u>Notice-Me</u></b></h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 order-md-1">
+          <form class="needs-validation"  action="/dep-myself" method="post">
+              {% csrf_token %}
+
+            <div class="span12" >
+             <p>
+                <em>Notice Me</em>是用于提醒到期事项的小工具，目的是<strong>防止多年/月之后遗忘</strong>，因为我们有一个烂记性！</p>
+                <p>在下方填入提醒的内容和时间，提前3天他会提醒你到期事项，每周一也会提醒30天内的到期事项。到时请注意查收邮件和短信！</p>
+      </p>
+      </div>
+              </br>
+
+              <div class="col-md-12 mb-3"> <label for="content"><b>提醒事项</b></label>
+                <input type="text" class="form-control"  name="context" id="content">
+              </div>
+            <div class="col-md-12 mb-3"> <label for="date"><b>到期日期</b></label>
+                <input type="date" class="form-control" name="notice_date" id="date">
+                 <p><b>提醒逻辑</b>：     1.每天提醒3天内到期事项；      2.每周一提醒30天内到期事项。</p>
+            </div>
+              <div class="col-md-12 mb-3"> <label><b>添加人</b></label>
+                  <select class="custom-select d-block w-100" name="name" id="name">
+                  <option value="">选择...</option>
+                      {%  for item in contact %}
+                      <option value="{{ item.name }}">{{ item.name }}</option>
+                      {% endfor %}
+                </select>
+
+              </div>
+                  <div class="col-md-12 mb-3"> <label><b>抄送:</b></label>
+                       {%  for item in contact %}
+                      <input type="checkbox" name="cc" value="{{ item.name }}"/>{{ item.name }}
+                      {% endfor %}
+              </div>
+
+            <hr class="mb-4">
+            <button class="btn btn-primary btn-lg btn-block" type="submit">提交</button>
+          </form>
+            {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success">
+             <strong>{{ message }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-5 text-muted text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 my-4">
+            <a href="/login/">登录</a> | <a href="/singup/">注册一个账户</a>| <a href="/show/">查看全部提醒</a>| <a href="/logout/">登出</a>| <a href="/lists/">LISTS</a>
+          <p class="mb-1">© 2018-2019 Support By RuiQ</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--
+ <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+  -->
+
+
+
+
+</body>
+
+</html>
