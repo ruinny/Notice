@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,re_path
+from django.urls import path, re_path
 from webpack import views
 from django.conf.urls import url, include
 
@@ -31,3 +31,8 @@ urlpatterns = {
     re_path(r'^send_message$', views.send_message, name='send_message'),
     re_path(r'^pc-geetest/register', views.pcgetcaptcha, name='pcgetcaptcha'),
 }
+
+handler400 = views.bad_request
+handler403 = views.permission_denied
+handler404 = views.page_not_found
+handler500 = views.error

@@ -222,3 +222,19 @@ def sendsms(mobile, passwd):
         print(e)
     except Exception as e:
         print(e)
+
+
+def bad_request(request):
+    return render(request, '400.html')
+
+
+def permission_denied(request):
+    return render(request, '403.html')
+
+
+def page_not_found(request):
+    return render(request, '404.html')
+
+
+def error(request):
+    return render(request, '500.html')
