@@ -6,6 +6,7 @@ from qcloudsms_py import SmsSingleSender
 from qcloudsms_py.httpclient import HTTPError
 import requests
 import webpack.models
+import os
 
 
 def get_list():
@@ -17,51 +18,26 @@ def get_list():
 
 
 def fetch_data(days, name):
-    mail_msg = """
-    <!-- CSS goes in the document HEAD or added to your external stylesheet -->
-    <style type="text/css">
-    table.gridtable {
-        font-family: verdana,arial,sans-serif;
-        font-size:12px;
-        color:#333333;
-        border-width: 1px;
-        border-color: #666666;
-        border-collapse: collapse;
-    }
-    table.gridtable th {
-        border-width: 1px;
-        padding: 8px;
-        border-style: solid;
-        border-color: #666666;
-        background-color: #dedede;
-    }
-    table.gridtable td {
-        border-width: 1px;
-        padding: 8px;
-        border-style: solid;
-        border-color: #666666;
-        background-color: #ffffff;
-    }
-    </style>
-    </br>
-    <p2>%s日工作提醒(%s)</p2>
-    </br>
-    <!-- Table goes in the document BODY -->
-    <table class="gridtable">
-    <tr>
-        <th>处理人</th><th>内容</th><th>时间</th><th>抄送</th>
-    </tr>""" % (days, datetime.datetime.now().strftime("%Y-%m-%d"))
+    mail_insert = ""
     data = webpack.models.Notice.objects.order_by('notice_date').filter(name=name,
                                                 notice_date__lte=(datetime.datetime.now() + datetime.timedelta(
                                                     days=days)).strftime("%Y-%m-%d"),
                                                 notice_date__gte=datetime.datetime.now().strftime("%Y-%m-%d"))
     for query in data:
-        mail_msg = mail_msg + "<tr>" + "<td>%s</td><td>%s</td><td>%s</td><td>%s</td>" \
+        mail_insert = mail_insert + "<tr>" + "<td>%s</td><td>%s</td><td>%s</td><td>%s</td>" \
                    % (query.name, query.context, query.notice_date, query.cc_from) + "</tr>"
-    mail_msg = mail_msg + "</table>"
+
     tel = webpack.models.Contact.objects.get(name=name).tel
     email = webpack.models.Contact.objects.get(name=name).email
-    return mail_msg, tel, email, len(data)
+    file = open('mail.html','r',encoding='UTF-8')
+    content = file.read()
+    pos=content.find('<!--table postion-->')
+    if pos != -1:
+        content=content[:pos] + mail_insert + content[pos:]
+        #file=open('mail.html','w',encoding='UTF-8')
+        #file.write(content)
+        #file.close()
+    return content, tel, email, len(data)
 
 
 def sendmail(msg_content, receiver):
