@@ -27,9 +27,10 @@ urlpatterns = {
     path('singup/', views.signup),
     path('logout/', views.logout),
     re_path(r'^dep-', views.dep_index),
-    re_path(r'^login', views.LoginView, name='login'),
+    path('login/', views.LoginView, name='login'),
     re_path(r'^send_message$', views.send_message, name='send_message'),
     re_path(r'^pc-geetest/register', views.pcgetcaptcha, name='pcgetcaptcha'),
+
 }
 
 handler400 = views.bad_request

@@ -56,13 +56,16 @@ def show(request):
 
 
 def showall(request):
-    context = Notice.objects.order_by('notice_date').filter(notice_date__gte=timezone.now())
+    if "user" in request.session and request.session['user'] == '4':
+        context = Notice.objects.order_by('notice_date').filter(notice_date__gte=timezone.now())
         # context = Notice.objects.filter(notice_date__gte=timezone.now())
-    if request.GET:
-        if request.method == 'GET':
-            Notice.objects.filter(pk=request.GET["id"]).delete()
-            messages.success(request, '删除成功')
-    return render(request, 'show.html', {'context': context})
+        if request.GET:
+            if request.method == 'GET':
+                Notice.objects.filter(pk=request.GET["id"]).delete()
+                messages.success(request, '删除成功')
+                return render(request, 'show.html', {'context': context})
+    else:
+        return HttpResponseRedirect('/login')
 
 
 def signup(request):
@@ -225,11 +228,11 @@ def sendsms(mobile, passwd):
 
 
 def bad_request(request):
-    return render(request, '400.html')
+    return render(request, '404.html')
 
 
 def permission_denied(request):
-    return render(request, '403.html')
+    return render(request, '404.html')
 
 
 def page_not_found(request):
@@ -237,4 +240,4 @@ def page_not_found(request):
 
 
 def error(request):
-    return render(request, '500.html')
+    return render(request, '404.html')
