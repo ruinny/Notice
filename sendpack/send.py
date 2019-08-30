@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import django
 import os
 import sys
@@ -15,7 +16,7 @@ for name in notice_list:
     if notice[3] != 0:
         sendmail(notice[0], notice[2])  # 发送提醒邮件
         sendsms(notice[1], notice[3], 3)  # 发送提醒短信
-        print(notice[2] + '有' + str(notice[3]) + '条提醒已经发送成功')
+        #print(notice[2] + '有' + str(notice[3]) + '条提醒已经发送成功')
         time.sleep(15)
     else:
         print("Nothing to notice")
@@ -26,7 +27,7 @@ if datetime.datetime.today().strftime('%A') == 'Monday':
         if notice[3] != 0:
             sendmail(notice[0], notice[2])  # 发送提醒邮件
             sendsms(notice[1], notice[3], 30)  # 发送提醒短信
-            print(notice[2] + '有' + str(notice[3]) + '条提醒已经发送成功')
+            #print(notice[2] + '有' + str(notice[3]) + '条提醒已经发送成功')
             time.sleep(15)
         else:
             print("Nothing to notice")
