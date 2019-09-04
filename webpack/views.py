@@ -112,11 +112,11 @@ def lists(request):
 
 
 def logout(request):
-    if 'user' in request.session:
+    try:
         del request.session['user']
-        return HttpResponse("登出成功")
-    else:
-        return HttpResponse("你又没登录，登出啥！")
+    except KeyError:
+        pass
+    return HttpResponse("You're logged out.")
 
 
 # 极验验证的id和key

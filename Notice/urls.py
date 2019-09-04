@@ -24,7 +24,7 @@ urlpatterns = {
     path('show/', views.show),
     #path('showall/',views.showall),
     path('lists/',views.lists),
-    #path('singup/', views.signup),
+    path('singup/', views.signup),
     path('logout/', views.logout),
     re_path(r'^dep-', views.dep_index),
     re_path(r'^login', views.LoginView, name='login'),
