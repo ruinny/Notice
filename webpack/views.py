@@ -55,14 +55,14 @@ def show(request):
         return HttpResponseRedirect("/login")
 
 
-def showall(request):
+def allnotice(request):
     context = Notice.objects.order_by('notice_date').filter(notice_date__gte=timezone.now())
     # context = Notice.objects.filter(notice_date__gte=timezone.now())
     if request.GET:
         if request.method == 'GET':
             Notice.objects.filter(pk=request.GET["id"]).delete()
             messages.success(request, '删除成功')
-            return render(request, 'show.html', {'context': context})
+    return render(request, 'show.html', {'context': context})
 
 
 def signup(request):
@@ -78,6 +78,11 @@ def signup(request):
             )
             messages.success(request, '添加成功')
     return render(request, 'singup.html')
+
+
+def user(request):
+    contact= Contact.objects.filter().all()
+    return render(request, 'user.html', {'contact': contact})
 
 
 def dep_index(request):
@@ -224,17 +229,17 @@ def sendsms(mobile, passwd):
         print(e)
 
 
-def bad_request(request):
-    return render(request, '404.html')
+#def bad_request(request):
+#    return render(request, '404.html')
 
 
-def permission_denied(request):
-    return render(request, '404.html')
+#def permission_denied(request):
+#    return render(request, '404.html')
 
 
-def page_not_found(request):
-    return render(request, '404.html')
+#def page_not_found(request):
+#    return render(request, '404.html')
 
 
-def error(request):
-    return render(request, '404.html')
+#def error(request):
+#    return render(request, '404.html')...

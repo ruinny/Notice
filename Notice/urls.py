@@ -22,9 +22,10 @@ urlpatterns = {
     path('admin/', admin.site.urls),
     path('', views.index),
     path('show/', views.show),
-    #path('showall/',views.showall),
+    path('allnotice/',views.allnotice),
     path('lists/',views.lists),
     path('singup/', views.signup),
+    path('user/', views.user),
     path('logout/', views.logout),
     re_path(r'^dep-', views.dep_index),
     re_path(r'^login', views.LoginView, name='login'),
@@ -32,8 +33,3 @@ urlpatterns = {
     re_path(r'^pc-geetest/register', views.pcgetcaptcha, name='pcgetcaptcha'),
 
 }
-
-handler400 = views.bad_request
-handler403 = views.permission_denied
-handler404 = views.page_not_found
-handler500 = views.error
