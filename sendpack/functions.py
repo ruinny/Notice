@@ -30,6 +30,7 @@ def fetch_data(days, name):
 
     tel = webpack.models.Contact.objects.get(name=name).tel
     email = webpack.models.Contact.objects.get(name=name).email
+    wxuid = webpack.models.Contact.objects.get(name=name).wxuid
     file = open('mail.html','r',encoding='UTF-8')
     content = file.read()
     pos=content.find('<!--table postion-->')
@@ -38,7 +39,7 @@ def fetch_data(days, name):
         #file=open('mail.html','w',encoding='UTF-8')
         #file.write(content)
         #file.close()
-    return content, tel, email, len(data)
+    return content, tel, email, len(data), wxuid
 
 
 def sendmail(msg_content, receiver):

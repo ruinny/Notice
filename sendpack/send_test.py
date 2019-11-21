@@ -8,6 +8,7 @@ os.environ.update({"DJANGO_SETTINGS_MODULE": "Notice.settings"})
 django.setup()
 from sendpack.functions import *
 import time
+from wxsender.views import *
 
 # notice_list = get_list()
 notice_list = ['孙睿谦']
@@ -15,8 +16,11 @@ notice_list = ['孙睿谦']
 for name in notice_list:
     notice = fetch_data(30, name)  # 获取提醒内容
     if notice[3] != 0:
-        sendmail(notice[0], notice[2])  # 发送提醒邮件
-        sendsms(notice[1], notice[3], 3)  # 发送提醒短信
+        #sendmail(notice[0], notice[2])  # 发送提醒邮件
+        #sendsms(notice[1], notice[3], 3)  # 发送提醒短信
+        print(notice[4])
+        if notice[4] != 'uid_':
+            sendwx(notice[0], notice[4])
         #print(notice[2] + '有' + str(notice[3]) + '条提醒已经发送成功')
         time.sleep(15)
     else:

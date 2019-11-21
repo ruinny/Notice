@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BindWX</title>
+    {% include 'header.html' %}
+</head>
+<body>
+<div class="container">
+	<div class="row">
+		<div class='col-md-12 text-center'>
+			<h3 class="text-center">
+				Notice微信绑定
+			</h3>
+			<p>
+				<span>使用微信绑定账号，每天的通知消息推送到微信，更快更便捷。</span>
+			</p>
+
+            <div>
+
+            <p>请确认你的账号：<b style="color:red">{% for user in loguser %}
+                    {{ user.name }}/{{ user.tel }}
+                {% endfor %}</b>，之后扫描下方二维码绑定微信。
+            </p>
+			</div>
+        <div>
+            <img src="{{ qr }}" alt="应用二维码" style="width: 100px; align-self: center;">
+            </div>
+		</div>
+	</div>
+</div>
+
+{% include 'footer.html' %}
+</body>
+</html>

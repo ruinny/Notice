@@ -21,6 +21,8 @@ class Contact(models.Model):
     tel = models.CharField(max_length=20)
     email = models.EmailField()
     depart = models.CharField(max_length=20)
+    wxuid = models.CharField(max_length=100,default='uid_')
+    wxname = models.CharField(max_length=40,default='')
     #frq_days = models.IntegerField(default=1)
     #bef_days = models.IntegerField(default=3)
 

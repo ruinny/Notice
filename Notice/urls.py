@@ -16,20 +16,22 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from webpack import views
+from wxsender import views as wxviews
 from django.conf.urls import url, include
 
-urlpatterns = {
+urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index),
-    path('show/', views.show),
-    path('allnotice/',views.allnotice),
-    path('lists/',views.lists),
+    path('', views.lists),
+    path('show/', views.show_notice),
+    path('allnotice/',views.show_all_notice),
     path('singup/', views.signup),
-    path('user/', views.user),
+    path('user/', views.show_all_user, name='user'),
+    path('moif_user/', views.re_user, name='re_user'),
     path('logout/', views.logout),
-    re_path(r'^dep-', views.dep_index),
+    path('bindwx',wxviews.bindwx),
+    path('bind_wx_back',wxviews.bind_wx_back),
+    re_path(r'^dep-', views.insert_notice),
     re_path(r'^login', views.LoginView, name='login'),
     re_path(r'^send_message$', views.send_message, name='send_message'),
     re_path(r'^pc-geetest/register', views.pcgetcaptcha, name='pcgetcaptcha'),
-
-}
+]

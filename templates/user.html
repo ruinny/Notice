@@ -3,12 +3,63 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+{% include 'header.html' %}
+
     <title>用户管理</title>
 </head>
-<body>
-    {% for item in contact %}
-        <p>{{ item.name }}/{{ item.email }}/{{ item.tel }}</p>
-    {% endfor %}
+<body class="bg-light">
+<div class="container">
+<div class="row">
 
+<div class="col-md-12">
+        {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success">
+             <strong>{{ message }}</strong>
+        </div>
+    {% endfor %}
+    {% endif %}
+</div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <label><h3>用户管理</h3></label>
+    </div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<table class="table table-sm">
+  <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">姓名</th>
+        <th scope="col">邮箱</th>
+        <th scope="col">电话</th>
+        <th scope="col">部门</th>
+        <th scope="col">修改</th>
+        <th scope="col">删除</th>
+    </tr>
+  </thead>
+  <tbody>
+        {% for item in contact %}
+            <tr>
+        <td scope="row">{{ item.id }}</td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.email }}</td>
+        <td>{{ item.tel }}</td>
+        <td>{{ item.depart }}</td>
+        <td><a href="{% url 're_user' %}?id={{ item.id }}">修改</a></td>
+        <td><a href=\user?id={{ item.id }}>删除</a></td>
+            </tr>
+        {% endfor %}
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+
+{% include 'footer.html' %}
 </body>
 </html>

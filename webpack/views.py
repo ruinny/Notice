@@ -12,38 +12,22 @@ from qcloudsms_py.httpclient import HTTPError
 
 # Create your views here.
 
-
-def index(request):
-    contact = Contact.objects.filter(depart='HR')
-    if request.method == 'POST':
-        form = AddNotice()
-        # form = AddNotice(request.POST)
-        # if form.is_valid():
-        Notice.objects.create(
-            name=request.POST['name'],
-            context=request.POST['context'],
-            notice_date=request.POST['notice_date'],
-            contact_id=Contact.objects.get(name=request.POST['name']).id
-        )
-        check_box_list = request.POST.getlist('cc')
-        for checkbox in check_box_list:
-            Notice.objects.create(
-                name=checkbox,
-                cc_from='抄送自' + request.POST['name'],
-                context=request.POST['context'],
-                notice_date=request.POST['notice_date'],
-                contact_id=Contact.objects.get(name=checkbox).id
-            )
-        messages.success(request, '添加成功')
-    else:
-        form = AddNotice()
-    return render(request, 'index.html', {'form': form, 'contact': contact})
+def lists(request):
+    return render(request,'lists.html')
 
 
-def show(request):
+def logout(request):
+    try:
+        del request.session['user']
+        messages.success(request,"登出成功")
+    except KeyError:
+        pass
+    return render(request,'lists.html')
+
+
+def show_notice(request):
     context = Notice.objects.order_by('notice_date').filter(notice_date__gte=timezone.now(),
                                                             contact_id=request.session.get("user"))
-
     if "user" in request.session:
         # context = Notice.objects.filter(notice_date__gte=timezone.now())
         if request.GET:
@@ -55,14 +39,34 @@ def show(request):
         return HttpResponseRedirect("/login")
 
 
-def allnotice(request):
-    context = Notice.objects.order_by('notice_date').filter(notice_date__gte=timezone.now())
-    # context = Notice.objects.filter(notice_date__gte=timezone.now())
-    if request.GET:
-        if request.method == 'GET':
-            Notice.objects.filter(pk=request.GET["id"]).delete()
-            messages.success(request, '删除成功')
-    return render(request, 'show.html', {'context': context})
+def insert_notice(request):
+    contact = Contact.objects.filter(depart=request.path[5:])
+    if request.method == 'POST':
+        form = AddNotice()
+        # form = AddNotice(request.POST)
+        # if form.is_valid():
+        """Notice.objects.create(
+            name=request.POST['name'],
+            context=request.POST['context'],
+            notice_date=request.POST['notice_date'],
+            contact_id=Contact.objects.get(name=request.POST['name']).id
+        )"""
+        check_box_list = request.POST.getlist('cc')
+        if len(check_box_list) >0:
+            for checkbox in check_box_list:
+                Notice.objects.create(
+                    name=checkbox,
+                    #cc_from='抄送自' + request.POST['name'],
+                    context=request.POST['context'],
+                    notice_date=request.POST['notice_date'],
+                    contact_id=Contact.objects.get(name=checkbox).id
+                )
+            messages.success(request, '添加成功')
+        else:
+            messages.success(request,'添加失败，至少选择一个通知人！')
+    else:
+        form = AddNotice()
+    return render(request, 'index-2.html', {'contact': contact, 'form': form})
 
 
 def signup(request):
@@ -80,48 +84,50 @@ def signup(request):
     return render(request, 'singup.html')
 
 
-def user(request):
-    contact= Contact.objects.filter().all()
-    return render(request, 'user.html', {'contact': contact})
-
-
-def dep_index(request):
-    contact = Contact.objects.filter(depart=request.path[5:])
-    if request.method == 'POST':
-        form = AddNotice()
-        # form = AddNotice(request.POST)
-        # if form.is_valid():
-        Notice.objects.create(
+def re_user(request):
+    if request.GET and request.method == 'GET':
+        contact=Contact.objects.filter(pk=request.GET["id"])
+        return render(request,'reuser.html',{'contact':contact})
+    elif request.POST and request.method=='POST':
+        Contact.objects.filter(pk=request.POST["id"]).update(
             name=request.POST['name'],
-            context=request.POST['context'],
-            notice_date=request.POST['notice_date'],
-            contact_id=Contact.objects.get(name=request.POST['name']).id
+            tel=request.POST['tel'],
+            email=request.POST['mail'],
+            depart=request.POST['depart']
         )
-        check_box_list = request.POST.getlist('cc')
-        for checkbox in check_box_list:
-            Notice.objects.create(
-                name=checkbox,
-                cc_from='抄送自' + request.POST['name'],
-                context=request.POST['context'],
-                notice_date=request.POST['notice_date'],
-                contact_id=Contact.objects.get(name=checkbox).id
-            )
-        messages.success(request, '添加成功')
+        messages.success(request, '修改成功')
+        return HttpResponseRedirect("/user")
     else:
-        form = AddNotice()
-    return render(request, 'index-2.html', {'contact': contact, 'form': form})
+        return render(request,'reuser.html')
 
 
-def lists(request):
-    return render(request,'lists.html')
+def show_all_user(request):
+    if 'user' in request.session:
+        if request.session['user'] == 4 or request.session['user'] == 11:
+            contact= Contact.objects.filter().all()
+            if request.GET:
+                if request.method == 'GET':
+                    Contact.objects.filter(pk=request.GET["id"]).delete()
+                    messages.success(request, '删除成功')
+            return render(request, 'user.html', {'contact': contact})
+        else:
+            messages.success(request, '没有权限，只有管理员可以查看，请用管理员权限登录！')
+            return render(request,'login.html')
+    else:
+        messages.success(request, '请先登录')
+        return render(request,'login.html')
 
 
-def logout(request):
-    try:
-        del request.session['user']
-    except KeyError:
-        pass
-    return HttpResponse("You're logged out.")
+
+def show_all_notice(request):
+    context = Notice.objects.order_by('notice_date').filter(notice_date__gte=timezone.now())
+    # context = Notice.objects.filter(notice_date__gte=timezone.now())
+    if request.GET:
+        if request.method == 'GET':
+            Notice.objects.filter(pk=request.GET["id"]).delete()
+            messages.success(request, '删除成功')
+    return render(request, 'show.html', {'context': context})
+
 
 
 # 极验验证的id和key
@@ -228,18 +234,3 @@ def sendsms(mobile, passwd):
     except Exception as e:
         print(e)
 
-
-#def bad_request(request):
-#    return render(request, '404.html')
-
-
-#def permission_denied(request):
-#    return render(request, '404.html')
-
-
-#def page_not_found(request):
-#    return render(request, '404.html')
-
-
-#def error(request):
-#    return render(request, '404.html')...
