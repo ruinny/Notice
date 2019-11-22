@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" type="image/ico" href="https://t.anyni.com/icons8-new-message-160.png">
+  <title>Notice Me - 通知提醒小工具</title>
+    {% include 'header.html' %}
+
+<script  type="text/javascript">
+$(function () {
+        $('form').bootstrapValidator({
+
+　　　　　　　　message: 'This value is not valid',
+            　feedbackIcons: {
+                　　　　　　　　valid: 'glyphicon glyphicon-ok',
+                　　　　　　　　invalid: 'glyphicon glyphicon-remove',
+                　　　　　　　　validating: 'glyphicon glyphicon-refresh'
+            　　　　　　　　   },
+            fields: {
+                context: {
+                    message: '内容验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '内容不能为空'
+                        }
+                    }
+                },
+                notice_date: {
+                    message: '内容验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '提醒日期不能为空'
+                        }
+                    }
+                },
+                name: {
+                    message: '内容验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '通知人不能为空'
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+</head>
+
+<body class="bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="text-center col-md-7 mx-auto">
+          <h2><b><u>Notice-Me</u></b></h2>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 order-md-1">
+          <form class="needs-validation"  action="{{ request.path }} " method="post">
+              {% csrf_token %}
+
+            <div class="col-md-12" >
+             <p>
+                <em>Notice Me</em>是用于提醒到期事项的小工具，目的是<strong>防止多年/月之后遗忘</strong>，因为我们有一个烂记性！</p>
+                <p>在下方填入提醒的内容和时间，提前3天他会提醒你到期事项，每周一也会提醒30天内的到期事项。到时请注意查收邮件和短信！</p>
+      </p>
+      </div>
+              </br>
+
+              <div class="col-md-12 mb-3"> <label><b>提醒事项</b></label>
+                <input type="text" class="form-control" name="context" >
+              </div>
+            <div class="col-md-12 mb-3"> <label><b>到期日期</b></label>
+                <input type="date" class="form-control" name="notice_date">
+
+            </div>
+
+              <div class="col-md-12 mb-3"> <label><b>提醒给:</b></label>
+              <br>
+                       {%  for item in contact %}
+
+                       <label class="checkbox-inline">
+                           <input type="checkbox"  name="cc" value="{{ item.name }}"> {{ item.name }}
+                       </label>
+
+                      {% endfor %}
+
+
+                  </div>
+          <hr class="mb-3">
+                <ul>
+                    <li>每天早上8:00提醒未来3天内到期事项</li>
+                    <li>每周一早上8:00提醒未来30天内到期事项</li>
+                </ul>
+            <button class="btn btn-primary btn-lg btn-block" type="submit">提交</button>
+          </form>
+            {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success">
+             <strong>{{ message }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+        </div>
+      </div>
+    </div>
+
+
+{% include 'footer.html' %}
+
+</body>
+
+</html>

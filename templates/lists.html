@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Notice Me - 通知提醒小工具</title>
+{% include 'header.html' %}
+
+</head>
+
+<body>
+<div class="jumbotron">
+  <h1 class="display-3">Notice Me</h1>
+  <p class="lead">欢迎访问NoticeMe的小工具。<em>Notice Me</em>是用于提醒到期事项的小工具，目的是<strong>防止多年/月之后遗忘</strong>，因为我们有一个烂记性！</p></p>
+  <hr class="my-4">
+  <p>这个小工具用来提醒工作中容易忘记的事情，当然你也可以用作提醒生活中的内容，但是需要把这个和工作圈的提醒分开。</p>
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+        {% if messages %}
+            {% for message in messages %}
+             <div class="alert alert-success">
+             <strong>{{ message }}</strong>
+             </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">项目圈</th>
+      <th scope="col">地址</th>
+      <th scope="col">使用人</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>WF-CMCC-HR</td>
+      <td><a href="/dep-HR">Dep-HR</a></td>
+      <td>潍坊移动人力部</td>
+    </tr>
+        <tr>
+      <th scope="row">2</th>
+      <td>WF-TOBACCO</td>
+      <td><a href="/dep-YC">Dep-YC</a></td>
+      <td>潍坊烟草卷烟销售科</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>Myself</td>
+      <td><a href="/dep-myself">Dep-Myself</a></td>
+      <td>测试用途</td>
+    </tr>
+
+  </tbody>
+</table>
+
+
+
+{% include 'footer.html' %}
+
+</body>
+
+</html>
