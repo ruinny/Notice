@@ -22,7 +22,8 @@ for name in notice_list:
         #print(notice[2] + '有' + str(notice[3]) + '条提醒已经发送成功')
         time.sleep(15)
     else:
-        print("Nothing to notice")
+        #enname=name.encode('utf-8')
+        print("Nothing")
 
 if datetime.datetime.today().strftime('%A') == 'Monday':
     for name in notice_list:

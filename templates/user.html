@@ -38,6 +38,7 @@
         <th scope="col">邮箱</th>
         <th scope="col">电话</th>
         <th scope="col">部门</th>
+        <th scope="col">微信uid</th>
         <th scope="col">修改</th>
         <th scope="col">删除</th>
     </tr>
@@ -50,6 +51,7 @@
         <td>{{ item.email }}</td>
         <td>{{ item.tel }}</td>
         <td>{{ item.depart }}</td>
+        <td>{{ item.wxuid }}</td>
         <td><a href="{% url 're_user' %}?id={{ item.id }}">修改</a></td>
         <td><a href=\user?id={{ item.id }}>删除</a></td>
             </tr>
