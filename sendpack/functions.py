@@ -49,7 +49,7 @@ def sendmail(msg_content, receiver):
     mail_pass = "zscfpxsnbkhydifc"  # 口令
     sender = 'notice-mee@qq.com'
     receivers = ['notice-mee@qq.com']
-    # receivers = ['cuidong@sd.chinamobile.com','sunruiqian@sd.chinamobile.com','lvkai@sd.chinamobile.com']  # 接收邮件，可设置为你的QQ邮箱或者其他邮箱
+   
     receivers.append(receiver)
     message = MIMEText(msg_content, 'html', 'utf-8')
     # message['From'] = Header("notice-mee@qq.com", 'utf-8')
